@@ -26,13 +26,17 @@ app.post("/api/shorturl", (req, res) => {
   const url = req.body.url;
   try {
     const urlObj = new URL(url);
+    console.log(urlObj);
     const hostname = urlObj.hostname;
-    dns.lookup(hostname, (err, address, family) => {
+    dns.lookup(hostname, (err) => {
       if (err) {
         res.json({ error: "invalid url" });
       } else {
         let shortUrl = uuidv4();
+        console.log(`Generated shortUrl: ${shortUrl}`);
+        console.log("Original url: " + url);
         url_database[shortUrl] = { original_url: url };
+
         res.json({ original_url: url, short_url: shortUrl });
       }
     });
@@ -44,6 +48,7 @@ app.post("/api/shorturl", (req, res) => {
 app.get("/api/shorturl/:shortUrl", (req, res) => {
   const shortUrl = req.params.shortUrl;
   if (url_database[shortUrl]) {
+    console.log(url_database[shortUrl].original_url);
     res.redirect(url_database[shortUrl].original_url);
   } else {
     res.json({ error: "invalid url" });
