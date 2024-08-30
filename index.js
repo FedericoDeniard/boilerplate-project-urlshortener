@@ -43,7 +43,7 @@ app.post("/api/shorturl", (req, res) => {
 
 app.get("/api/shorturl/:shortUrl", (req, res) => {
   const shortUrl = req.params.shortUrl;
-  if (shortUrl[shortUrl]) {
+  if (url_database[shortUrl]) {
     res.redirect(url_database[shortUrl].original_url);
   } else {
     res.json({ error: "invalid url" });
